@@ -16,9 +16,16 @@ class SelfDrive:
         # 전진 속도 및 회전 속도 지정
         if scan.ranges[0] < 0.25:
             turtle_vel.linear.x = 0.0  
-            turtle_vel.angular.z = 0.0     
+            turtle_vel.angular.z = 0.0
+        elif scan.ranges[30] < 0.25:
+            turtle_vel.linear.x = 0.0  
+            turtle_vel.angular.z = -2
+        elif scan.ranges[330] < 0.25:
+            turtle_vel.linear.x = 0.0  
+            turtle_vel.angular.z = 2
+       
         else :
-           turtle_vel.linear.x = 0.05  
+           turtle_vel.linear.x = 0.15  
            turtle_vel.angular.z = 0.0
     
          # 속도 출력
