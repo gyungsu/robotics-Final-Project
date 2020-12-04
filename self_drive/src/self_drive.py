@@ -9,30 +9,21 @@ class SelfDrive:
         self.count = 30
 
     def lds_callback(self, scan):
-        # scan 분석 후 속도 결정
-        # ...
         print("scan[0]:", scan.ranges[0])
         turtle_vel = Twist()
-        # 전진 속도 및 회전 속도 지정
-        if scan.ranges[0] < 0.25:
-            turtle_vel.linear.x = 0.0
-            turtle_vel.angular.z = 0.0
-        elif scan.ranges[0] < 0.25 and scan.ranges[30] < 0.25:
-            turtle_vel.linear.x = 0.0  
-            turtle_vel.angular.z = -2
-        elif scan.ranges[0] < 0.25 and scan.ranges[330] < 0.25:
-            turtle_vel.linear.x = 0.0  
-            turtle_vel.angular.z = 2
        
+        if scan.ranges[0] < 0.3:
+            if (scan.ranges[45] - scan.ranges[315])>0:
+                turtle_vel.angular.z = 1.8
+            elif (scan.ranges[45] - scan.ranges[315])<0:
+                turtle_vel.angular.z = -1.8                 
         else :
-           turtle_vel.linear.x = 0.15  
-           turtle_vel.angular.z = 0.0
-    
-         # 속도 출력
+            turtle_vel.linear.x = 0.15  
         self.publisher.publish(turtle_vel)
 
-def main():
+def main(): 
     rospy.init_node('self_drive')
+    
     publisher = rospy.Publisher('cmd_vel', Twist, queue_size=1)
     driver = SelfDrive(publisher)
     subscriber = rospy.Subscriber('scan', LaserScan,
